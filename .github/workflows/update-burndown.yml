@@ -22,7 +22,7 @@ jobs:
         run: pip install matplotlib requests
 
       - name: Run burndown chart generator
-        run: python scripts/generate_burndown_gql.py
+        run: python scripts/generate_burndown.py
         env:
           GITHUB_TOKEN: ${{ secrets.CRYPTCRAWLER_TOKEN }}
 
