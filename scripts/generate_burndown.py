@@ -112,7 +112,7 @@ print(f"Remaining: {remaining_points} / Total: {total_points}")
 # Step 3: Update JSON log
 timestamp = datetime.utcnow().strftime("%Y-%m-%d")
 
-log_path = os.path.join("../docs", "burndown_log.json")
+log_path = os.path.join("docs", "burndown_log.json")
 if os.path.exists(log_path):
     with open(log_path, "r") as f:
         log = json.load(f)
@@ -143,4 +143,4 @@ plt.grid(True, linestyle="--", alpha=0.3)
 plt.legend()
 plt.tight_layout()
 
-plt.savefig(os.path.join("../docs", "burndown.png"))
+plt.savefig(os.path.join("docs", "burndown.png"))
