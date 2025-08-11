@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - "docs/**"
+      - "scripts/**"
 
 env:
   GITHUB_TOKEN: ${{ secrets.CRYPTCRAWLER_TOKEN }} 

@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo with PAT
+      - name: Checkout deploy branch
         uses: actions/checkout@v4
         with: 
-            ref: master
+            ref: deploy
             token: ${{ secrets.CRYPTCRAWLER_TOKEN }} 
 
       - name: Set up Python
@@ -30,27 +30,11 @@ jobs:
       - name: Run burndown chart generator
         run: python scripts/generate_burndown.py
 
-      - name: Checkout deploy branch
-        uses: actions/checkout@v4
-        with:
-            ref: deploy
-            path: deploy
-            token: ${{ secrets.CRYPTCRAWLER_TOKEN }}
-
-      - name: Debug output folder
-        run: |
-          echo "Contents of working directory:"
-          ls -al
-          echo "Contents of output/:"
-          ls -al output || echo "output/ folder not found"
-
       # Commit and push
       - name: Commit and push to deploy
-        working-directory: deploy
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add output/burndown.png
-          git add output/burndown_log.json
+          git add output/
           git commit -m "chore: update burndown chart" || echo "No changes to commit"
           git push origin deploy
