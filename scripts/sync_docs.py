@@ -9,7 +9,7 @@ DEPLOY_REMOTE = "origin"
 COMMIT_MESSAGE = "chore: sync docs and scripts from master to deploy"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO_URL = f"https://x-access-token:{GITHUB_TOKEN}@github.com/tentricks/cryptcrawler-docs.git"
-EXCLUDE_DIRS = ["generated"]
+EXCLUDE_DIRS = ["generated", "assets"]
 
 # Paths
 CURRENT_DIR = os.getcwd()
