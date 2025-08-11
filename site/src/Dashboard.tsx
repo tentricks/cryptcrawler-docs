@@ -25,6 +25,7 @@ import {
     BarChart,
     Bar
 } from "recharts";
+import { levelFromTotalXp } from "./xp";
 
 // NOTE: This is a standalone draft UI meant for quick iteration.
 // - Uses Tailwind classes for styling
@@ -38,30 +39,6 @@ import {
 function cls(...xs)
 {
     return xs.filter(Boolean).join(" ");
-}
-
-function levelFromXP(xp: number)
-{
-    // Simple RPG-like curve
-    // Lvl 1 = 0 xp, each level requires 100 * level^1.15
-    let level = 1;
-    let remaining = xp;
-    let need = 0;
-    while (true)
-    {
-        need = Math.round(100 * Math.pow(level, 1.15));
-        if (remaining < need)
-        {
-            break;
-        }
-        remaining -= need;
-        level++;
-        if (level > 200)
-        {
-            break; // safety
-        }
-    }
-    return { level, intoLevelXP: remaining, levelNeed: need };
 }
 
 // ---------------------------
@@ -116,7 +93,7 @@ export default function GamifiedTrackerDashboard()
     const [streak, setStreak] = useState<number>(5); // days in a row
     const totalXP = useMemo(() => 2480, []);
 
-    const lv = useMemo(() => levelFromXP(totalXP), [totalXP]);
+    const lv = useMemo(() => levelFromTotalXp(totalXP), [totalXP]);
     const xpProgressPct = Math.max(0, Math.min(100, Math.round((lv.intoLevelXP / lv.levelNeed) * 100)));
     const xpToNext = lv.levelNeed - lv.intoLevelXP;
 
