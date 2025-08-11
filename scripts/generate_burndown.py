@@ -8,7 +8,7 @@ OWNER = "tentricks"
 REPO = "cryptcrawler"
 PROJECT_TITLE = "CryptCrawler Quest Log"
 SIZE_FIELD_NAME = "Size"
-OUTPUT_DIR = "output"
+OUTPUT_DIR = "docs"
 
 SIZE_POINTS = {
     "XS": 1,
