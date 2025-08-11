@@ -3,18 +3,33 @@ on:
   workflow_dispatch:
   schedule: [{ cron: "0 15 * * *" }]  # 23:00 SGT -> adjust as you like
   push: { branches: ["master"] }
+env:
+    TZ: Asia/Singapore
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Singapore
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
-      - run: pip install requests
-      - run: python scripts/generate_xp.py
+      - name: Checkout deploy branch
+        uses: actions/checkout@v4
+        with:
+            ref: deploy
+            token: ${{ secrets.CRYPTCRAWLER_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+            python-version: "3.x"
+        
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run XP data generator
+        run: python scripts/generate_xp.py
+             ls ./
+             ls ./docs/generated
+
       - name: Commit JSON if changed
         run: |
           git config user.name "github-actions"
@@ -23,4 +38,4 @@ jobs:
           git diff --quiet && echo "No changes" || git commit -m "chore: update XP cache"
           git push || true
       # If you publish from a separate deploy branch/repo:
-      - run: python scripts/sync_docs.py
+      # - run: python scripts/sync_docs.py

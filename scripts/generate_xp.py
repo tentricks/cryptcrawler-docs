@@ -50,7 +50,6 @@ def main():
     #    (reuse your burndown GraphQL shape; add closedAt/mergedAt and assignees)
     #    For brevity, assume we produced a list of events:
     #    events = [{"date": "YYYY-MM-DD", "kind":"issue_closed","sp":3,"assignees":1,"pr_closes":False}, ...]
-
     events = []  # TODO: fill from GraphQL
 
     # 2) Aggregate by day
