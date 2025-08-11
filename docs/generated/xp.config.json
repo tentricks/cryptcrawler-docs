@@ -1,0 +1,10 @@
+{
+  "baseXpPerStoryPoint": 25,
+  "prMergeBonus": 0.2,
+  "microCapPerDay": 60,
+  "docFlatXp": 10,
+  "maxStreakMultiplier": 2.5,
+  "levelA": 100,
+  "levelAlpha": 1.15,
+  "timezone": "Asia/Singapore"
+}

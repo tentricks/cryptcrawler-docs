@@ -1,0 +1,26 @@
+name: Update XP
+on:
+  workflow_dispatch:
+  schedule: [{ cron: "0 15 * * *" }]  # 23:00 SGT -> adjust as you like
+  push: { branches: ["master"] }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Singapore
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install requests
+      - run: python scripts/generate_xp.py
+      - name: Commit JSON if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/generated/*.json || true
+          git diff --quiet && echo "No changes" || git commit -m "chore: update XP cache"
+          git push || true
+      # If you publish from a separate deploy branch/repo:
+      - run: python scripts/sync_docs.py
