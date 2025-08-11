@@ -146,4 +146,7 @@ plt.grid(True, linestyle="--", alpha=0.3)
 plt.legend()
 plt.tight_layout()
 
-plt.savefig(os.path.join(OUTPUT_DIR, "burndown.png"))
+burndown_output_path = os.path.join(OUTPUT_DIR, "burndown.png")
+plt.savefig(burndown_output_path)
+
+print("Burndown data generated at: " + burndown_output_path)

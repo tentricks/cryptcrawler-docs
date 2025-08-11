@@ -37,12 +37,12 @@ jobs:
             path: deploy
             token: ${{ secrets.CRYPTCRAWLER_TOKEN }}
 
-      # Move files from output/ to deploy/docs/
-      - name: Move generated files into deploy/docs
+      - name: Debug output folder
         run: |
-          mkdir -p deploy/docs
-          cp -r output/* deploy/docs/
-          ls deploy/docs/
+          echo "Contents of working directory:"
+          ls -al
+          echo "Contents of output/:"
+          ls -al output || echo "output/ folder not found"
 
       # Commit and push
       - name: Commit and push to deploy
@@ -50,6 +50,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/burndown_log.json docs/burndown.png
+          git add output/burndown.png
+          git add output/burndown_log.json
           git commit -m "chore: update burndown chart" || echo "No changes to commit"
           git push origin deploy
