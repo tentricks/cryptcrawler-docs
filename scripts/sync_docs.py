@@ -9,6 +9,7 @@ DEPLOY_REMOTE = "origin"
 COMMIT_MESSAGE = "chore: sync docs and scripts from master to deploy"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO_URL = f"https://x-access-token:{GITHUB_TOKEN}@github.com/tentricks/cryptcrawler-docs.git"
+EXCLUDE_DIRS = ["generated"]
 
 # Paths
 CURRENT_DIR = os.getcwd()
@@ -28,8 +29,17 @@ with tempfile.TemporaryDirectory() as temp_dir:
 
     # Clear old docs
     if os.path.exists(deploy_docs_path):
-        shutil.rmtree(deploy_docs_path)
+        for item in os.listdir(deploy_docs_path):
+            item_path = os.path.join(deploy_docs_path, item)
+            if os.path.isdir(item_path) and item in EXCLUDE_DIRS:
+                continue
+            if os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+            else:
+                os.remove(item_path)
+
     os.makedirs(deploy_docs_path, exist_ok=True)
+    os.makedirs(os.path.join(deploy_docs_path, "generated"), exist_ok=True)
 
     # Copy new docs
     print("Copying docs/ into deploy branch...")
