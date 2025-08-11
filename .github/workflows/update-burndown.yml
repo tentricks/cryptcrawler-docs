@@ -5,6 +5,9 @@ on:
     - cron: '0 3 * * *'  # every day at 3:00 UTC
   workflow_dispatch:      # allows manual trigger
 
+env:
+  GITHUB_TOKEN: ${{ secrets.CRYPTCRAWLER_TOKEN }} 
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -13,6 +16,7 @@ jobs:
       - name: Checkout repo with PAT
         uses: actions/checkout@v4
         with: 
+            ref: master
             token: ${{ secrets.CRYPTCRAWLER_TOKEN }} 
 
       - name: Set up Python
@@ -25,13 +29,27 @@ jobs:
 
       - name: Run burndown chart generator
         run: python scripts/generate_burndown.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.CRYPTCRAWLER_TOKEN }}
 
-      - name: Commit and push changes
+      - name: Checkout deploy branch
+        uses: actions/checkout@v4
+        with:
+            ref: deploy
+            path: deploy
+            token: ${{ secrets.CRYPTCRAWLER_TOKEN }}
+
+      # Move files from output/ to deploy/docs/
+      - name: Move generated files into deploy/docs
+        run: |
+          mkdir -p deploy/docs
+          cp -r output/* deploy/docs/
+          ls deploy/docs/
+
+      # Commit and push
+      - name: Commit and push to deploy
+        working-directory: deploy
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add docs/burndown_log.json docs/burndown.png
           git commit -m "chore: update burndown chart" || echo "No changes to commit"
-          git push https://tentricks:${{ secrets.CRYPTCRAWLER_TOKEN }}@github.com/tentricks/cryptcrawler-docs.git HEAD:master
+          git push origin deploy
