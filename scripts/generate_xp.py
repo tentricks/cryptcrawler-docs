@@ -46,20 +46,17 @@ def main():
     cfg = load_cfg()
     tz  = ZoneInfo(cfg.get("timezone","UTC"))
 
-    print("1")
     # 1) Resolve project number, fetch items (issues + fields + PRs as needed)
     #    (reuse your burndown GraphQL shape; add closedAt/mergedAt and assignees)
     #    For brevity, assume we produced a list of events:
     #    events = [{"date": "YYYY-MM-DD", "kind":"issue_closed","sp":3,"assignees":1,"pr_closes":False}, ...]
     events = []  # TODO: fill from GraphQL
 
-    print("2")
     # 2) Aggregate by day
     by_day = defaultdict(list)
     for e in events:
         by_day[e["date"]].append(e)
 
-    print("3")
     # 3) Walk days in order, compute streak + daily XP
     days = sorted(by_day.keys())
     streak = 0
@@ -84,7 +81,6 @@ def main():
         total += day_xp
         daily[d] = {"xp": day_xp, "streak": streak, "events": len(by_day[d])}
 
-    print("4")
     # 4) Totals for bar
     lvl = level_from_total(total, cfg)
 
@@ -93,6 +89,5 @@ def main():
     with open("docs/generated/xp_total.json","w") as f: json.dump({"totalXp": total, **lvl}, f, indent=2)
     with open("docs/generated/xp_ledger.json","w") as f: json.dump(ledger, f, indent=2)
 
-    print("5")
 if __name__ == "__main__":
     main()
