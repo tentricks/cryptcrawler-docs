@@ -1,3 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* site/src/index.css */
+@import "tailwindcss";
+
+/* tell Tailwind where to look for classes */
+@source "../index.html";
+@source "./**/*.{ts,tsx}";
