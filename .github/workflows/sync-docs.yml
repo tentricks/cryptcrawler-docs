@@ -1,0 +1,34 @@
+name: Sync Docs to Deploy Branch
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.CRYPTCRAWLER_TOKEN }} 
+
+jobs:
+  sync-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for branch switching
+          token: ${{ secrets.CRYPTCRAWLER_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r ./requirements.txt || true  # if needed
+
+      - name: Sync docs to deploy
+        run: python scripts/sync_docs.py
+
+      - name: Done!
+        run: echo "Synced docs to deploy branch."
