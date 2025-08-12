@@ -105,7 +105,6 @@ for item in items:
 
     points = SIZE_POINTS[size_value]
     total_points += points
-    print(content);
     if isinstance(content, dict) and content.get("state") == "OPEN":
       remaining_points += points
 
